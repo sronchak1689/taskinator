@@ -1,5 +1,5 @@
 var formEl = document.querySelector("#task-form");
-
+var taskIdCounter = 0;
 var buttonEl = document.querySelector("#save-task");
 var tasksToDoEl = document.querySelector("#tasks-to-do");
 
@@ -9,7 +9,7 @@ var taskFormHandler = function (event) {
 
     var taskNameInput = document.querySelector("input[name='task-name']").value;
     var taskTypeInput = document.querySelector("select[name='task-type']").value;
-    
+
     // check if input values are empty strings
     if (!taskNameInput || !taskTypeInput) {
         alert("Please Fill out all fields...stupid!");
@@ -19,7 +19,7 @@ var taskFormHandler = function (event) {
     formEl.reset();
 
     // package up data as an object
-    var taskDataObj= {
+    var taskDataObj = {
         name: taskNameInput,
         type: taskTypeInput
     };
@@ -29,19 +29,49 @@ var taskFormHandler = function (event) {
 }
 
 var createTaskEl = function (taskDataObj) {
+
+
     // create list item
     var listItemEl = document.createElement("li");
     listItemEl.className = "task-item";
+
+    listItemEl.setAttribute("data-task-id", taskIdCounter);
 
     // create div to hold task info and add to list item
     var taskInfoEl = document.createElement("div");
     taskInfoEl.className = "task-info";
     taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
-
     listItemEl.appendChild(taskInfoEl);
 
     // add entire list item to list
     tasksToDoEl.appendChild(listItemEl);
+
+    // increase task counter for next unique id
+    taskIdCounter++;
+
+}
+
+var createTaskActions = function (taskId) {
+    var actionContainerEl = document.createElement("div");
+    actionContainerEl.className = "task-actions";
+
+    // create edit button
+    var editButtonEl = document.createElement("button")
+    editButtonEl.textContent = "Edit";
+    editButtonEl.className = "btn edit-btn";
+    editButtonEl.setAttribute("data-task-id", taskId);
+
+    actionContainerEl.appendChild(editButtonEl);
+
+    // create delete button
+    var deleteButtonEl = document.createElement("button");
+    deleteButtonEl = textContent = "Delete";
+    deleteButtonEl = className = "btn delete-btn";
+    deleteButtonEl.setAttribute("data-task-id", taskId);
+    actionContainerEl.appendChild(deleteButtonEl);
+
+    return actionContainerEl;
+
 };
 
 formEl.addEventListener("submit", taskFormHandler);
